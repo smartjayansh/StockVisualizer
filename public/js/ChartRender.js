@@ -3,59 +3,67 @@ import stockData from './StockData.js';
 // sampleData = JSON.parse(sampleData);
 
 let stockPriceData;
-let stockSymbol = 'TSLA'
+let myChart;
 // Function to get stock price data
-async function getStockPriceData() {
-    
+async function getStockPriceData(symbol) {
+
     // Call the fetchStockPrices method to get the stock price data
-    stockPriceData = await stockData.fetchStockPrices(stockSymbol);
+    stockPriceData = await stockData.fetchStockPrices(symbol);
 }
 // Call the getStockPriceData function to get the stock price data
-getStockPriceData().then(() => {
-    const data = {
-        datasets: [{
-            label: 'Symbol ' + stockSymbol,
-            data: [
-            ],
-        }]
-    };
-
-    const timeSeries = stockPriceData['Time Series (Daily)'];
-    for (const date in timeSeries) {
-        const dataPoint = timeSeries[date];
-        const dateTime = luxon.DateTime.fromFormat(date, 'yyyy-MM-dd');
-
-        const chartDataPoint = {
-            x: dateTime.valueOf(),
-            o: parseFloat(dataPoint['1. open']),
-            h: parseFloat(dataPoint['2. high']),
-            l: parseFloat(dataPoint['3. low']),
-            c: parseFloat(dataPoint['4. close'])
+function renderChart(symbol) {
+    getStockPriceData(symbol).then(() => {
+        const data = {
+            datasets: [{
+                label: 'Symbol ' + symbol,
+                data: [
+                ],
+            }]
         };
 
-        data.datasets[0].data.push(chartDataPoint);
-    }
+        const timeSeries = stockPriceData['Time Series (Daily)'];
+        for (const date in timeSeries) {
+            const dataPoint = timeSeries[date];
+            const dateTime = luxon.DateTime.fromFormat(date, 'yyyy-MM-dd');
 
-    // config 
-    const config = {
-        type: 'candlestick',
-        data,
-        options: {}
-    };
+            const chartDataPoint = {
+                x: dateTime.valueOf(),
+                o: parseFloat(dataPoint['1. open']),
+                h: parseFloat(dataPoint['2. high']),
+                l: parseFloat(dataPoint['3. low']),
+                c: parseFloat(dataPoint['4. close'])
+            };
 
-    // render init block
-    const myChart = new Chart(
-        document.getElementById('myChart'),
-        config
-    );
+            data.datasets[0].data.push(chartDataPoint);
+        }
 
-    // Instantly assign Chart.js version
-    const chartVersion = document.getElementById('chartVersion');
-    chartVersion.innerText = Chart.version;
+        // config 
+        const config = {
+            type: 'candlestick',
+            data,
+            options: {}
+        };
 
-}).catch((error) => {
-    console.log('Error rendering chart:', error.message);
-});
+        if (typeof myChart !== 'undefined') {
+            // Destroy the chart
+            myChart.destroy();
+            console.log("Destroying chart");
+        }
 
+        // render init block
+        myChart = new Chart(
+            document.getElementById('myChart'),
+            config
+        );
+        
+        const chartVersion = document.getElementById('chartVersion');
+        chartVersion.innerText = Chart.version;
 
+    }).catch((error) => {
+        console.log('Error rendering chart:', error.message);
+    });
+
+}
+renderChart("AMZN");
+export default {renderChart};
 

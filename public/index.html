@@ -17,12 +17,19 @@
 <body>
     <div class="chartCard">
         <div class="chartBox">
+            <div class="inputBox">
+                <label for="symbolInput">Enter stock symbol:</label>
+                <input type="text" id="symbolInput" name="symbolInput">
+                <button id="symbolSubmitBtn">Submit</button>
+            </div>
             <canvas id="myChart"></canvas>
             <p id="chartVersion"></p>
         </div>
     </div>
 
     <script type="module" src="js/ChartRender.js"></script>
+    <script type="module" src="js/UpdateChart.js"></script>
+
 
 </body>
 

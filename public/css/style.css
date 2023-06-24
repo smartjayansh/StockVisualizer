@@ -23,6 +23,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
 }
 
 .chartBox {
@@ -31,4 +32,13 @@
     border-radius: 20px;
     border: solid 3px rgba(54, 162, 235, 1);
     background: white;
+    position: relative;
+    z-index: 0;
 }
+
+.inputBox {
+    position: absolute;
+    top: 0;
+    left: 150px;
+    z-index: 1;
+  }

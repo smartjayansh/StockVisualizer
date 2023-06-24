@@ -1,5 +1,4 @@
 const apiKey = 'TM10CHSB541K0CYZ'; // Replace with your Alpha Vantage API key
-const symbol = 'AAPL'; // Replace with the desired stock symbol
 // Function to fetch stock prices
 async function fetchStockPrices(stockSymbol) {
   try {
