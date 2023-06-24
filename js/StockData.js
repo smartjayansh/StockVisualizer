@@ -1,19 +1,13 @@
 const apiKey = 'TM10CHSB541K0CYZ'; // Replace with your Alpha Vantage API key
 const symbol = 'AAPL'; // Replace with the desired stock symbol
-let stockPriceData = "Empty Data";
 // Function to fetch stock prices
 async function fetchStockPrices() {
   try {
     const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=${apiKey}`);
-    stockPriceData = await response.json();
     
     // Check if the API call was successful
     if (response.ok) {
-      // const price = data['Global Quote']['05. price'];
-      console.log(data);
-      // console.log(`Stock Price for ${symbol}: ${price}`);
-    } else {
-      console.log('Error fetching stock prices:', data['Error Message']);
+      return await response.json();
     }
   } catch (error) {
     console.log('Error:', error.message);
@@ -21,8 +15,7 @@ async function fetchStockPrices() {
 }
 
 // Call the function to fetch stock prices
-//fetchStockPrices();
-export default {stockPriceData};
+export default {fetchStockPrices};
 
 
 // Sample Response from Alpha Vantage API
