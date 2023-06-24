@@ -3,15 +3,18 @@ import stockData from './StockData.js';
 // sampleData = JSON.parse(sampleData);
 
 let stockPriceData;
+let stockSymbol = 'TSLA'
 // Function to get stock price data
 async function getStockPriceData() {
+    
     // Call the fetchStockPrices method to get the stock price data
-    stockPriceData = await stockData.fetchStockPrices();
+    stockPriceData = await stockData.fetchStockPrices(stockSymbol);
 }
 // Call the getStockPriceData function to get the stock price data
 getStockPriceData().then(() => {
     const data = {
         datasets: [{
+            label: 'Symbol ' + stockSymbol,
             data: [
             ],
         }]

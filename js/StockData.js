@@ -1,9 +1,9 @@
 const apiKey = 'TM10CHSB541K0CYZ'; // Replace with your Alpha Vantage API key
 const symbol = 'AAPL'; // Replace with the desired stock symbol
 // Function to fetch stock prices
-async function fetchStockPrices() {
+async function fetchStockPrices(stockSymbol) {
   try {
-    const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${symbol}&apikey=${apiKey}`);
+    const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`);
     
     // Check if the API call was successful
     if (response.ok) {
