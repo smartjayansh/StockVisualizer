@@ -4,17 +4,6 @@
     font-family: sans-serif;
 }
 
-.chartMenu {
-    width: 100vw;
-    height: 40px;
-    background: #1A1A1A;
-    color: rgba(54, 162, 235, 1);
-}
-
-.chartMenu p {
-    padding: 10px;
-    font-size: 20px;
-}
 
 .chartCard {
     width: 100vw;
@@ -27,7 +16,7 @@
 }
 
 .chartBox {
-    width: 700px;
+    width: 800px;
     padding: 20px;
     border-radius: 20px;
     border: solid 3px rgba(54, 162, 235, 1);
@@ -41,4 +30,17 @@
     top: 0;
     left: 150px;
     z-index: 1;
-  }
+}
+
+.chart-container {
+    position: relative;
+}
+
+/* #chartCanvas, */
+#overlayCanvas {
+    position: absolute;
+    top: 20px;
+    z-index: 1;
+    box-sizing: border-box;
+    display: block;
+}

@@ -22,13 +22,18 @@
                 <input type="text" id="symbolInput" name="symbolInput">
                 <button id="symbolSubmitBtn">Submit</button>
             </div>
-            <canvas id="myChart"></canvas>
+            
+            <div class="chart-container">
+                <canvas id="chartCanvas"></canvas>
+                <canvas id="overlayCanvas"></canvas>
+            </div>
             <p id="chartVersion"></p>
         </div>
     </div>
 
     <script type="module" src="js/ChartRender.js"></script>
     <script type="module" src="js/UpdateChart.js"></script>
+    <script src="js/LineDraw.js"></script>
 
 
 </body>

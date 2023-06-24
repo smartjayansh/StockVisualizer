@@ -52,7 +52,7 @@ function renderChart(symbol) {
 
         // render init block
         myChart = new Chart(
-            document.getElementById('myChart'),
+            document.getElementById('chartCanvas'),
             config
         );
         
