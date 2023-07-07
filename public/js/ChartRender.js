@@ -23,7 +23,7 @@ function renderChart(symbol, timeFrame = 'daily') {
                 label: 'Symbol ' + symbol,
                 data: [
                 ],
-                meta:{
+                meta: {
                     chartSymbol: symbol,
                 }
             }]
@@ -63,7 +63,7 @@ function renderChart(symbol, timeFrame = 'daily') {
             document.getElementById('chartCanvas'),
             config
         );
-        
+
         const chartVersion = document.getElementById('chartVersion');
         chartVersion.innerText = Chart.version;
 
@@ -73,5 +73,5 @@ function renderChart(symbol, timeFrame = 'daily') {
 
 }
 renderChart("AMZN");
-export {renderChart, myChart};
+export { renderChart, myChart };
 

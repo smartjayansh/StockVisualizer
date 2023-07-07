@@ -1,18 +1,28 @@
-const apiKey = 'TM10CHSB541K0CYZ'; // Replace with your Alpha Vantage API key
-const apiUrls = {
-  daily: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED',
-  weekly: 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED',
-  monthly: 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED'
-};
+import {apiKey, stockDataApiUrls, stockSearchApiUrl} from './Constants.js';
 // Function to fetch stock prices
 async function fetchStockPrices(stockSymbol, timeFrame) {
   try {
-    const apiUrl = `${apiUrls[timeFrame]}&symbol=${stockSymbol}&apikey=${apiKey}`;
+    const apiUrl = `${stockDataApiUrls[timeFrame]}&symbol=${stockSymbol}&apikey=${apiKey}`;
     const response = await fetch(apiUrl);
     
     // Check if the API call was successful
     if (response.ok) {
-      return await response.json();
+      return response.json();
+    }
+  } catch (error) {
+    console.log('Error:', error.message);
+  }
+}
+
+async function searchStockSymbols() {
+  try {
+    let searchInput = document.getElementById('symbolInput');
+    let query = searchInput.value;
+    const searchUrl = `${stockSearchApiUrl}&keywords=${query}&apikey=${apiKey}`;
+    const response = await fetch(searchUrl);
+    // Check if the API call was successful
+    if (response.ok) {
+      return response.json();
     }
   } catch (error) {
     console.log('Error:', error.message);
@@ -20,7 +30,7 @@ async function fetchStockPrices(stockSymbol, timeFrame) {
 }
 
 // Call the function to fetch stock prices
-export default {fetchStockPrices};
+export default {fetchStockPrices, searchStockSymbols};
 
 
 // Sample Response from Alpha Vantage API
