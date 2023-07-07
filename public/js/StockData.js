@@ -1,8 +1,14 @@
 const apiKey = 'TM10CHSB541K0CYZ'; // Replace with your Alpha Vantage API key
+const apiUrls = {
+  daily: 'https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED',
+  weekly: 'https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY_ADJUSTED',
+  monthly: 'https://www.alphavantage.co/query?function=TIME_SERIES_MONTHLY_ADJUSTED'
+};
 // Function to fetch stock prices
-async function fetchStockPrices(stockSymbol) {
+async function fetchStockPrices(stockSymbol, timeFrame) {
   try {
-    const response = await fetch(`https://www.alphavantage.co/query?function=TIME_SERIES_DAILY_ADJUSTED&symbol=${stockSymbol}&apikey=${apiKey}`);
+    const apiUrl = `${apiUrls[timeFrame]}&symbol=${stockSymbol}&apikey=${apiKey}`;
+    const response = await fetch(apiUrl);
     
     // Check if the API call was successful
     if (response.ok) {

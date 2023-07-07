@@ -16,7 +16,6 @@ function startDrawing(event) {
   var x = event.clientX - rect.left;
   var y = event.clientY - rect.top;
   lineCoordinates.push({ x: x, y: y });
-  console.log(lineCoordinates);
 }
 
 function drawLine(event) {

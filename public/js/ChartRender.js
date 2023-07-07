@@ -4,24 +4,32 @@ import stockData from './StockData.js';
 
 let stockPriceData;
 let myChart;
+const stockPriceDataKey = {
+    daily: 'Time Series (Daily)',
+    weekly: 'Weekly Adjusted Time Series',
+    monthly: 'Monthly Adjusted Time Series'
+};
 // Function to get stock price data
-async function getStockPriceData(symbol) {
+async function getStockPriceData(symbol, timeFrame = 'daily') {
 
     // Call the fetchStockPrices method to get the stock price data
-    stockPriceData = await stockData.fetchStockPrices(symbol);
+    stockPriceData = await stockData.fetchStockPrices(symbol, timeFrame);
 }
 // Call the getStockPriceData function to get the stock price data
-function renderChart(symbol) {
-    getStockPriceData(symbol).then(() => {
+function renderChart(symbol, timeFrame = 'daily') {
+    getStockPriceData(symbol, timeFrame).then(() => {
         const data = {
             datasets: [{
                 label: 'Symbol ' + symbol,
                 data: [
                 ],
+                meta:{
+                    chartSymbol: symbol,
+                }
             }]
         };
 
-        const timeSeries = stockPriceData['Time Series (Daily)'];
+        const timeSeries = stockPriceData[stockPriceDataKey[timeFrame]];
         for (const date in timeSeries) {
             const dataPoint = timeSeries[date];
             const dateTime = luxon.DateTime.fromFormat(date, 'yyyy-MM-dd');
@@ -65,5 +73,5 @@ function renderChart(symbol) {
 
 }
 renderChart("AMZN");
-export default {renderChart};
+export {renderChart, myChart};
 
