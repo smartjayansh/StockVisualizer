@@ -45,11 +45,41 @@ function renderChart(symbol, timeFrame = 'daily') {
             data.datasets[0].data.push(chartDataPoint);
         }
 
+        var options = {
+            plugins: {
+              zoom: {
+                zoom: {
+                  wheel: {
+                    enabled: true // Enable zooming with mouse wheel
+                  },
+                  drag: {
+                    enabled: true // Enable zooming by dragging
+                  },
+                  pinch: {
+                    enabled: true // Enable zooming with pinch gesture
+                  },
+                  mode: 'x' // Enable zooming only in the x-direction
+                }
+              }
+            },
+            scales: {
+              x: {
+                type: 'time', // Assuming x-axis is a time scale
+                time: {
+                  unit: 'day' // Adjust the time scale unit as needed
+                }
+              },
+              y: {
+                // Configure the y-axis scale as needed
+              }
+            }
+          };
+
         // config 
         const config = {
             type: 'candlestick',
             data,
-            options: {}
+            options: options
         };
 
         if (typeof myChart !== 'undefined') {
@@ -63,6 +93,7 @@ function renderChart(symbol, timeFrame = 'daily') {
             document.getElementById('chartCanvas'),
             config
         );
+        console.log(myChart);
 
         const chartVersion = document.getElementById('chartVersion');
         chartVersion.innerText = Chart.version;

@@ -3,6 +3,7 @@ import {apiKey, stockDataApiUrls, stockSearchApiUrl} from './Constants.js';
 async function fetchStockPrices(stockSymbol, timeFrame) {
   try {
     const apiUrl = `${stockDataApiUrls[timeFrame]}&symbol=${stockSymbol}&apikey=${apiKey}`;
+    console.log(apiUrl);
     const response = await fetch(apiUrl);
     
     // Check if the API call was successful
