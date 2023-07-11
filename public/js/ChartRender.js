@@ -5,102 +5,125 @@ import stockData from './StockData.js';
 let stockPriceData;
 let myChart;
 const stockPriceDataKey = {
-    daily: 'Time Series (Daily)',
-    weekly: 'Weekly Adjusted Time Series',
-    monthly: 'Monthly Adjusted Time Series'
+  daily: 'Time Series (Daily)',
+  weekly: 'Weekly Adjusted Time Series',
+  monthly: 'Monthly Adjusted Time Series'
 };
+
+function calculateAdjustedPrices(open, high, low, close, adjustedClose) {
+  let adjustedOpen = (open / close) * adjustedClose;
+  let adjustedHigh = (high / close) * adjustedClose;
+  let adjustedLow = (low / close) * adjustedClose;
+  let adjustedClosePrice = parseFloat(adjustedClose.toFixed(2));
+
+  return [
+    parseFloat(adjustedOpen.toFixed(2)),
+    parseFloat(adjustedHigh.toFixed(2)),
+    parseFloat(adjustedLow.toFixed(2)),
+    adjustedClosePrice
+  ];
+}
+
 // Function to get stock price data
 async function getStockPriceData(symbol, timeFrame = 'daily') {
 
-    // Call the fetchStockPrices method to get the stock price data
-    stockPriceData = await stockData.fetchStockPrices(symbol, timeFrame);
+  // Call the fetchStockPrices method to get the stock price data
+  stockPriceData = await stockData.fetchStockPrices(symbol, timeFrame);
 }
 // Call the getStockPriceData function to get the stock price data
 function renderChart(symbol, timeFrame = 'daily') {
-    getStockPriceData(symbol, timeFrame).then(() => {
-        const data = {
-            datasets: [{
-                label: 'Symbol ' + symbol,
-                data: [
-                ],
-                meta: {
-                    chartSymbol: symbol,
-                }
-            }]
-        };
-
-        const timeSeries = stockPriceData[stockPriceDataKey[timeFrame]];
-        for (const date in timeSeries) {
-            const dataPoint = timeSeries[date];
-            const dateTime = luxon.DateTime.fromFormat(date, 'yyyy-MM-dd');
-
-            const chartDataPoint = {
-                x: dateTime.valueOf(),
-                o: parseFloat(dataPoint['1. open']),
-                h: parseFloat(dataPoint['2. high']),
-                l: parseFloat(dataPoint['3. low']),
-                c: parseFloat(dataPoint['4. close'])
-            };
-
-            data.datasets[0].data.push(chartDataPoint);
+  getStockPriceData(symbol, timeFrame).then(() => {
+    const data = {
+      datasets: [{
+        label: 'Symbol ' + symbol,
+        data: [
+        ],
+        meta: {
+          chartSymbol: symbol,
         }
+      }]
+    };
 
-        var options = {
-            plugins: {
-              zoom: {
-                zoom: {
-                  wheel: {
-                    enabled: true // Enable zooming with mouse wheel
-                  },
-                  drag: {
-                    enabled: true // Enable zooming by dragging
-                  },
-                  pinch: {
-                    enabled: true // Enable zooming with pinch gesture
-                  },
-                  mode: 'x' // Enable zooming only in the x-direction
-                }
-              }
+    const timeSeries = stockPriceData[stockPriceDataKey[timeFrame]];
+    for (const date in timeSeries) {
+      const dataPoint = timeSeries[date];
+      const dateTime = luxon.DateTime.fromFormat(date, 'yyyy-MM-dd');
+      let [adjustedOpen, adjustedHigh, adjustedLow, adjustedClose] = calculateAdjustedPrices(parseFloat(dataPoint['1. open']),
+        parseFloat(dataPoint['2. high']), parseFloat(dataPoint['3. low']), parseFloat(dataPoint['4. close']), parseFloat(dataPoint['5. adjusted close']));
+
+
+      const chartDataPoint = {
+        x: dateTime.valueOf(),
+        o: adjustedOpen,
+        h: adjustedHigh,
+        l: adjustedLow,
+        c: adjustedClose
+      };
+
+      data.datasets[0].data.push(chartDataPoint);
+    }
+
+    var options = {
+      plugins: {
+        zoom: {
+          zoom: {
+            wheel: {
+              enabled: true // Enable zooming with mouse wheel
             },
-            scales: {
-              x: {
-                type: 'time', // Assuming x-axis is a time scale
-                time: {
-                  unit: 'day' // Adjust the time scale unit as needed
-                }
-              },
-              y: {
-                // Configure the y-axis scale as needed
-              }
-            }
-          };
-
-        // config 
-        const config = {
-            type: 'candlestick',
-            data,
-            options: options
-        };
-
-        if (typeof myChart !== 'undefined') {
-            // Destroy the chart
-            myChart.destroy();
-            console.log("Destroying chart");
+            // drag: {
+            //   enabled: true // Enable zooming by dragging
+            // },
+            pinch: {
+              enabled: true // Enable zooming with pinch gesture
+            },
+            mode: 'x' // Enable zooming only in the x-direction
+          }
+        },
+        tooltip: {
+          enabled: true, // Enable tooltips
+          mode: 'nearest', // Show tooltip for the nearest data point
+          intersect: false, // Allow hovering over multiple candles
+        },
+      },
+      scales: {
+        x: {
+          type: 'time', // Assuming x-axis is a time scale
+          time: {
+            unit: 'day' // Adjust the time scale unit as needed
+          }
+        },
+        y: {
+          // Configure the y-axis scale as needed
         }
+      }
+    };
 
-        // render init block
-        myChart = new Chart(
-            document.getElementById('chartCanvas'),
-            config
-        );
-        console.log(myChart);
+    // config 
+    const config = {
+      type: 'candlestick',
+      data,
+      options: options
+    };
 
-        const chartVersion = document.getElementById('chartVersion');
-        chartVersion.innerText = Chart.version;
+    if (typeof myChart !== 'undefined') {
+      // Destroy the chart
+      myChart.destroy();
+      console.log("Destroying chart");
+    }
 
-    }).catch((error) => {
-        console.log('Error rendering chart:', error.message);
-    });
+    // render init block
+    myChart = new Chart(
+      document.getElementById('chartCanvas'),
+      config
+    );
+    console.log(myChart);
+
+    const chartVersion = document.getElementById('chartVersion');
+    chartVersion.innerText = Chart.version;
+
+  }).catch((error) => {
+    console.log('Error rendering chart:', error.message);
+  });
 
 }
 renderChart("AMZN");
